@@ -1,15 +1,23 @@
-name: Build
-on: [pull_request, push]
+name: Build NumWorks App
+
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Install toolchain
-        uses: numworks/setup-arm-toolchain@latest
-      - name: Run make build
-        run: make build
-      - name: Run make check
-        run: make check
+      - uses: actions/checkout@v4
+
+      - name: Install Nwagyu
+        run: pip install nwagyu
+
+      - name: Build app
+        run: nwagyu build .
+
+      - name: Upload NWA
+        uses: actions/upload-artifact@v4
+        with:
+          name: numworks-app
+          path: output/*.nwa
